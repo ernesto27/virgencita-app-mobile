@@ -1,0 +1,69 @@
+
+import React, {Component} from 'react';
+import {StyleSheet, Text, View, Image, Slider} from 'react-native';
+import { HueRotate } from 'react-native-color-matrix-image-filters';
+import ApiClient from './ApiClient';
+
+
+Math.radians = function(degrees) {
+    return degrees * Math.PI / 180;
+};
+
+export default class App extends Component {
+	constructor(props){
+    	super(props);
+
+      	this.state = {
+			humidity: 0,
+        	amount: Math.radians(0)
+		}
+		  
+		// Get user location
+		navigator.geolocation.getCurrentPosition((data) => {
+			console.log('coords user', data)
+			ApiClient.getForecast(data, (forecast) => {
+				const humidity = ApiClient.getHumidity(forecast);
+				console.log('humidity', humidity);
+				  
+				this.setState({
+					humidity: humidity,
+					amount: Math.radians(humidity)
+				})
+			});
+		}, (error) => {
+			console.log(error)
+		});
+      
+      
+  }
+
+  render() {
+    return (
+      <View style={styles.container}>
+        <HueRotate
+            
+            amount={this.state.amount}
+        >
+            <Image
+                source={require('./imageVirgen.png')}
+            />
+        </HueRotate>
+
+		<Text
+			style={{textAlign: 'center'}}
+		>
+			El souvenir del clima dice: {this.state.humidity}% de probabilidad de precipitaciones
+		</Text>
+      </View>
+    );
+  }
+}
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: '#F5FCFF',
+  },
+});
