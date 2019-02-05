@@ -1,7 +1,9 @@
-export default class ApiClient {
+import config from './config';
+
+export default class ApiCient {
 
     static getForecast(data, callback){
-        const apiKey = '';
+        const apiKey = config.apiKeyDarkSky;
         const lat = data.coords.latitude;
         const long = data.coords.longitude;
         // const lat = '-34.603683';
