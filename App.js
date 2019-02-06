@@ -3,7 +3,7 @@ import React, { Component } from 'react';
 import { StyleSheet, View, Image, ActivityIndicator } from 'react-native';
 import { HueRotate } from 'react-native-color-matrix-image-filters';
 import { Badge, Text } from 'native-base';
-import ApiClient from './ApiClient';
+import { getForecast, getHumidity, getCityName } from './src/utils';
 
 
 Math.radians = function(degrees) {
@@ -17,30 +17,35 @@ export default class App extends Component {
       	this.state = {
 			isLoading: true,
 			humidity: 0,
-        	amount: Math.radians(0)
+			amount: Math.radians(0),
+			cityName: ''
 		}
-		  
-		// Get user location
+		
 		navigator.geolocation.getCurrentPosition((data) => {
-			console.log('coords user', data)
-			ApiClient.getForecast(data, (forecast) => {
-				const humidity = ApiClient.getHumidity(forecast);
+			console.log('coords user', data);
+			const latitude = data.coords.latitude;
+			const longitude = data.coords.longitude;
+
+			getForecast(latitude, longitude, (forecast) => {
+				console.log('forecast', forecast);
+				const humidity = getHumidity(forecast);
 				console.log('humidity', humidity);
 				console.log('amount', Math.radians(humidity));
-				  
-				this.setState({
-					isLoading: false,
-					humidity: humidity,
-					amount: Math.radians(humidity)
-				});
 
+				getCityName(latitude, longitude, (cityName) => {
+					this.setState({
+						isLoading: false,
+						humidity: humidity,
+						amount: Math.radians(humidity),
+						cityName: cityName
+					});
+				})
 			});
 		}, (error) => {
 			console.log(error)
 		});
 	}
 	  
-
 	render() {
     	return (
       		<View style={styles.container}>
@@ -68,7 +73,7 @@ export default class App extends Component {
 								}}
 							>
 								<Badge primary>
-									<Text>Buenos aires</Text>
+									<Text>{this.state.cityName}</Text>
 								</Badge>
 							</View>
 						</React.Fragment>

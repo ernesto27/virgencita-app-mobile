@@ -1,3 +1,4 @@
 module.exports = {
-    apiKeyDarkSky: ''
+    apiKeyDarkSky: '',
+    apiKeyGoogle: ''
 }
