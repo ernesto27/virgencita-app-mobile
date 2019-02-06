@@ -1,7 +1,8 @@
 
 import React, { Component } from 'react';
-import { StyleSheet, Text, View, Image, ActivityIndicator } from 'react-native';
+import { StyleSheet, View, Image, ActivityIndicator } from 'react-native';
 import { HueRotate } from 'react-native-color-matrix-image-filters';
+import { Badge, Text } from 'native-base';
 import ApiClient from './ApiClient';
 
 
@@ -25,19 +26,20 @@ export default class App extends Component {
 			ApiClient.getForecast(data, (forecast) => {
 				const humidity = ApiClient.getHumidity(forecast);
 				console.log('humidity', humidity);
+				console.log('amount', Math.radians(humidity));
 				  
 				this.setState({
 					isLoading: false,
 					humidity: humidity,
 					amount: Math.radians(humidity)
-				})
+				});
+
 			});
 		}, (error) => {
 			console.log(error)
 		});
-      
-      
-  }
+	}
+	  
 
 	render() {
     	return (
@@ -58,6 +60,17 @@ export default class App extends Component {
 							>
 								El souvenir del clima dice: {this.state.humidity}% de probabilidad de precipitaciones
 							</Text>
+
+							<View
+								style={{
+									alignContent:'center',
+									marginTop: 10
+								}}
+							>
+								<Badge primary>
+									<Text>Buenos aires</Text>
+								</Badge>
+							</View>
 						</React.Fragment>
 				}
       		</View>
