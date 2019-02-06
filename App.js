@@ -1,6 +1,6 @@
 
-import React, {Component} from 'react';
-import {StyleSheet, Text, View, Image, Slider} from 'react-native';
+import React, { Component } from 'react';
+import { StyleSheet, Text, View, Image, ActivityIndicator } from 'react-native';
 import { HueRotate } from 'react-native-color-matrix-image-filters';
 import ApiClient from './ApiClient';
 
@@ -14,6 +14,7 @@ export default class App extends Component {
     	super(props);
 
       	this.state = {
+			isLoading: true,
 			humidity: 0,
         	amount: Math.radians(0)
 		}
@@ -26,6 +27,7 @@ export default class App extends Component {
 				console.log('humidity', humidity);
 				  
 				this.setState({
+					isLoading: false,
 					humidity: humidity,
 					amount: Math.radians(humidity)
 				})
@@ -37,26 +39,30 @@ export default class App extends Component {
       
   }
 
-  render() {
-    return (
-      <View style={styles.container}>
-        <HueRotate
-            
-            amount={this.state.amount}
-        >
-            <Image
-                source={require('./imageVirgen.png')}
-            />
-        </HueRotate>
+	render() {
+    	return (
+      		<View style={styles.container}>
+				{(this.state.isLoading) 
+					?	<ActivityIndicator size="large" />
+					: 	<React.Fragment>
+							<HueRotate
+								amount={this.state.amount}
+							>
+								<Image
+									source={require('./imageVirgen.png')}
+								/>
+							</HueRotate>
 
-		<Text
-			style={{textAlign: 'center'}}
-		>
-			El souvenir del clima dice: {this.state.humidity}% de probabilidad de precipitaciones
-		</Text>
-      </View>
-    );
-  }
+							<Text
+								style={{textAlign: 'center'}}
+							>
+								El souvenir del clima dice: {this.state.humidity}% de probabilidad de precipitaciones
+							</Text>
+						</React.Fragment>
+				}
+      		</View>
+    	);
+  	}
 }
 
 const styles = StyleSheet.create({
