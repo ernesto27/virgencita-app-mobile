@@ -41,6 +41,8 @@ export default class App extends Component {
 							amount: Math.radians(humidity),
 							cityName: cityName
 						});
+					}, (error) => {
+						console.log('Error trying to get city name');
 					})
 				});
 			}, (error) => {
@@ -83,7 +85,7 @@ export default class App extends Component {
 								amount={this.state.amount}
 							>
 								<Image
-									source={require('./imageVirgen.png')}
+									source={require('./images/imageVirgen.png')}
 								/>
 							</HueRotate>
 
