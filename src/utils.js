@@ -25,7 +25,7 @@ export function getHumidity(forecast) {
     return((humidity + precipP)/2)
 }
 
-export function getCityName(lat, long, callback) {
+export function getCityName(lat, long, callbackSucces, callbackError) {
     Geocoder.from(lat, long)
         .then(json => {
             var addressComponent = json.results[0].address_components;
@@ -38,8 +38,13 @@ export function getCityName(lat, long, callback) {
                 }  
             });
 
-            callback(address.long_name);
+            callbackSucces(address.long_name);
             console.log('cityName', address.long_name)
         })
-        .catch(error => console.warn(error));
+        .catch((error) => {
+            console.log('GeoCityNameError');
+            console.log(error);
+            callbackError();
+        });
+            
 }
