@@ -4,6 +4,7 @@ import { StyleSheet, View, Image, ActivityIndicator, PermissionsAndroid } from '
 import { HueRotate } from 'react-native-color-matrix-image-filters';
 import { Container, Badge, Text, DeckSwiper, Card, CardItem } from 'native-base';
 import { getForecast, getHumidity, getCityName } from './src/utils';
+import Geolocation from 'react-native-geolocation-service';
 
 
 Math.radians = function(degrees) {
@@ -36,7 +37,7 @@ export default class App extends Component {
 		
 
 		this.requestPermission(() => {
-			navigator.geolocation.getCurrentPosition((data) => {
+			Geolocation.getCurrentPosition((data) => {
 				console.log('coords user', data);
 				const latitude = data.coords.latitude;
 				const longitude = data.coords.longitude;
