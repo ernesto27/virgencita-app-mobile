@@ -9,4 +9,4 @@ import {name as appName} from './app.json';
 
 import ViewScreen from './ViewScreen';
 
-AppRegistry.registerComponent(appName, () => ViewScreen);
+AppRegistry.registerComponent(appName, () => App);

@@ -2,13 +2,26 @@
 import React, { Component } from 'react';
 import { StyleSheet, View, Image, ActivityIndicator, PermissionsAndroid } from 'react-native';
 import { HueRotate } from 'react-native-color-matrix-image-filters';
-import { Badge, Text } from 'native-base';
+import { Container, Badge, Text, DeckSwiper, Card, CardItem } from 'native-base';
 import { getForecast, getHumidity, getCityName } from './src/utils';
 
 
 Math.radians = function(degrees) {
     return degrees * Math.PI / 180;
 };
+
+
+const cards = [
+	{
+		image: require('./images/imageVirgen.png'),
+	},
+	{
+		image: require('./images/lobo_marino.png'),
+	},
+	{
+		image: require('./images/fragata.png'),
+	},
+];
 
 export default class App extends Component {
 	constructor(props){
@@ -77,46 +90,83 @@ export default class App extends Component {
 
 	render() {
     	return (
-      		<View style={styles.container}>
+
+			<Container
+				style={{
+					marginTop: 80,
+				}}
+			>
 				{(this.state.isLoading) 
-					?	<ActivityIndicator size="large" />
-					: 	<React.Fragment>
-							<HueRotate
-								amount={this.state.amount}
-							>
-								<Image
-									source={require('./images/imageVirgen.png')}
-								/>
-							</HueRotate>
+				?	
+				<ActivityIndicator size="large" />
+				:
+				<React.Fragment>
+					<View>
+						<DeckSwiper
+							dataSource={cards}
+							renderItem={item =>
+								<Card style={{ elevation: 3 }}>
+									<CardItem 
+										cardBody
+										style={{
+											justifyContent:'center'
+										}}	
+									>
+										<HueRotate
+											amount={Math.radians(this.state.amount)}
+										>
+											<Image 
+												style={{ 
+													width: 262, 
+													height: 320, 
+													resizeMode: 'contain',
+													
+												}} 
+												source={item.image} 
+											/>
+										</HueRotate>
+									</CardItem>
+							</Card>
+							}
+						/>
+					</View>
 
-							<Text
-								style={{textAlign: 'center'}}
-							>
-								El souvenir del clima dice: {this.state.humidity}% de probabilidad de precipitaciones
-							</Text>
+					<View 
+						style={{ 
+							flexDirection: "column", 
+							position: "absolute", 
+							bottom: 50, 
+							left: 0, 
+							right: 0, 
+							padding: 15 
+						}}
+					>
+						
+						<Text
+							style={{ textAlign: 'center' }}
+						>
+							El souvenir del clima dice: {this.state.humidity}% de probabilidad de precipitaciones
+						</Text>
 
-							<View
+						<View
+							style={{
+								marginTop: 10,
+							}}
+						>
+							<Badge 
+								primary
 								style={{
-									alignContent:'center',
-									marginTop: 10
-								}}
+									alignSelf: 'center'
+								}}	
 							>
-								<Badge primary>
-									<Text>{this.state.cityName}</Text>
-								</Badge>
-							</View>
-						</React.Fragment>
-				}
-      		</View>
+								<Text>{this.state.cityName}</Text>
+							</Badge>
+						</View>
+					</View>
+				</React.Fragment>			
+			}
+	  	</Container>
     	);
   	}
 }
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: '#F5FCFF',
-  },
-});
