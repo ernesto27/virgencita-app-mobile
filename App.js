@@ -21,6 +21,9 @@ const cards = [
 	{
 		image: require('./images/fragata.png'),
 	},
+	{
+		image: require('./images/virgencita.png'),
+	},
 ];
 
 export default class App extends Component {
